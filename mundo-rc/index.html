@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mundo RC · Juguetes a control remoto · Pago contra entrega</title>
+<meta name="description" content="Carros, motos, drones, lanchas, aviones y máquinas a control remoto. Envío a toda Colombia y pago contra entrega.">
+<meta name="theme-color" content="#FFF7EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF7EA; --paper:#FFFFFF; --ink:#1F1A3D; --ink-2:#5B5677; --line:#EFE6D6;
+    --red:#FF4B4B; --yellow:#FFC531; --blue:#2E8BFF; --green:#22C07A; --purple:#7B5CFF; --orange:#FF8A1F;
+    --ease:cubic-bezier(.32,.72,0,1);
+    --ease-out:cubic-bezier(.23,1,.32,1);
+    --r:22px;
+    --shadow-sm:0 1px 2px rgba(31,26,61,.06),0 2px 6px rgba(31,26,61,.05);
+    --shadow:0 2px 4px rgba(31,26,61,.04),0 12px 28px -8px rgba(31,26,61,.16);
+    --display:"Baloo 2",system-ui,sans-serif;
+    --text:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{font-family:var(--text);background:var(--cream);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+  button{font:inherit;color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 18px}
+  :focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:10px}
+
+  /* Cinta superior */
+  .ribbon{background:var(--ink);color:#fff;font-weight:800;font-size:.82rem;overflow:hidden;white-space:nowrap}
+  .ribbon .track{display:inline-flex;gap:42px;padding:9px 0;animation:marquee 28s linear infinite}
+  .ribbon span{display:inline-flex;align-items:center;gap:8px}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:20;background:rgba(255,247,234,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+  header.scrolled{border-color:var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+  .logo-mark{width:42px;height:42px;border-radius:14px;background:var(--red);display:grid;place-items:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15);transform:rotate(-6deg)}
+  .logo-mark svg{width:26px;height:26px}
+  .logo-word{font-family:var(--display);font-weight:800;font-size:1.55rem;letter-spacing:-.5px;line-height:1}
+  .logo-word b{color:var(--red)}
+  .cart-btn{position:relative;display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:10px 16px 10px 14px;font-weight:800;cursor:pointer;transition:transform .16s var(--ease-out)}
+  .cart-btn:active{transform:scale(.96)}
+  .cart-btn .count{background:var(--yellow);color:var(--ink);min-width:24px;height:24px;border-radius:999px;display:grid;place-items:center;font-size:.8rem;padding:0 6px}
+  .cart-btn .count.pop{animation:pop .4s var(--ease-out)}
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+  /* Hero */
+  .hero{position:relative;padding:44px 0 34px}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 8px;font-weight:800;font-size:.85rem;box-shadow:var(--shadow-sm)}
+  .eyebrow i{width:22px;height:22px;border-radius:999px;background:var(--green);display:grid;place-items:center;font-style:normal;font-size:.75rem;color:#fff}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,5.4vw,3.9rem);line-height:1.02;letter-spacing:-1.2px;margin:16px 0 14px}
+  .hl{position:relative;white-space:nowrap;color:var(--red)}
+  .hl::after{content:"";position:absolute;left:-2%;right:-2%;bottom:.08em;height:.28em;background:var(--yellow);border-radius:8px;z-index:-1;transform:rotate(-1.5deg)}
+  .hero p{color:var(--ink-2);font-size:1.12rem;max-width:520px}
+  .cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .btn{border:0;cursor:pointer;border-radius:16px;padding:14px 20px;font-weight:800;font-size:1rem;transition:transform .16s var(--ease-out),box-shadow .2s,background-color .2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:var(--red);color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.14)}
+  .btn-primary:hover{background:#ff3838}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+  .perks{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:16px;margin-top:26px}
+  .perk{display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9rem}
+  .perk .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:1.15rem}
+
+  .hero-art{position:relative;aspect-ratio:1/1;max-width:440px;justify-self:center;width:100%}
+  .blob{position:absolute;border-radius:36% 64% 58% 42%/42% 38% 62% 58%;inset:6%;background:var(--yellow);animation:morph 12s var(--ease) infinite alternate}
+  @keyframes morph{to{border-radius:58% 42% 38% 62%/56% 60% 40% 44%}}
+  .float{position:absolute;display:grid;place-items:center;border-radius:28px;background:#fff;box-shadow:var(--shadow);font-size:clamp(3.4rem,7vw,5.2rem);animation:bob 5s var(--ease) infinite alternate}
+  .float img{width:100%;height:100%;object-fit:contain;padding:10%;border-radius:28px;background:#fff}
+  .f1{width:44%;aspect-ratio:1;left:4%;top:12%;transform:rotate(-8deg)}
+  .f2{width:38%;aspect-ratio:1;right:4%;top:4%;animation-delay:-1.4s;transform:rotate(7deg)}
+  .f3{width:40%;aspect-ratio:1;left:30%;bottom:4%;animation-delay:-2.6s;transform:rotate(-3deg)}
+  @keyframes bob{to{translate:0 -10px}}
+  .sticker{position:absolute;right:2%;bottom:16%;background:var(--blue);color:#fff;font-family:var(--display);font-weight:800;border-radius:999px;width:106px;height:106px;display:grid;place-items:center;text-align:center;line-height:1;font-size:1rem;transform:rotate(12deg);box-shadow:var(--shadow)}
+  .sticker small{display:block;font-size:.72rem;font-family:var(--text);font-weight:800;opacity:.9;margin-top:2px}
+
+  .deadline{margin:8px 0 0;display:flex;align-items:center;gap:12px;background:#fff;border:2px dashed var(--red);border-radius:18px;padding:12px 16px;font-weight:700}
+  .deadline .d{font-family:var(--display);font-size:1.6rem;color:var(--red);line-height:1}
+
+  /* Sección productos */
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:46px 0 16px}
+  .section-head h2{font-family:var(--display);font-size:clamp(1.7rem,3.4vw,2.3rem);letter-spacing:-.6px;line-height:1.05}
+  .section-head p{color:var(--ink-2);font-weight:600}
+  .filters{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 18px;scrollbar-width:none;position:relative}
+  .filters::-webkit-scrollbar{display:none}
+  .f{flex:0 0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 16px 9px 10px;font-weight:800;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s,transform .16s var(--ease-out);box-shadow:var(--shadow-sm)}
+  .f:active{transform:scale(.96)}
+  .f .dot{width:26px;height:26px;border-radius:999px;display:grid;place-items:center;font-size:.9rem}
+  .f.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;padding-bottom:30px}
+  .card{background:var(--paper);border-radius:var(--r);box-shadow:var(--shadow-sm);border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;transition:transform .35s var(--ease),box-shadow .35s var(--ease);animation:rise .5s var(--ease) both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+  @media (hover:hover){.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}.card:hover .ph img.alt{opacity:1}}
+  .ph{position:relative;aspect-ratio:1/1;background:var(--tint,#FFF1D6);display:grid;place-items:center;overflow:hidden}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;transition:opacity .35s var(--ease),filter .4s,transform .5s var(--ease);background:#fff}
+  .ph img.loading{filter:blur(10px);opacity:.4}
+  .ph img.alt{opacity:0}
+  .ph .emoji{font-size:5rem;filter:drop-shadow(0 8px 10px rgba(0,0,0,.12));transition:transform .5s var(--ease)}
+  @media (hover:hover){.card:hover .ph .emoji{transform:scale(1.08) rotate(-4deg)}}
+  .ph .soon{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.85);border-radius:999px;font-size:.72rem;font-weight:800;padding:4px 10px;color:var(--ink-2);white-space:nowrap}
+  .tag{position:absolute;top:12px;left:12px;font-weight:800;font-size:.74rem;padding:5px 10px;border-radius:999px;color:#fff;background:var(--ink);box-shadow:var(--shadow-sm)}
+  .age{position:absolute;top:12px;right:12px;font-weight:800;font-size:.74rem;padding:5px 9px;border-radius:999px;background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)}
+  .body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .name{font-family:var(--display);font-weight:700;font-size:1.18rem;line-height:1.15;letter-spacing:-.2px}
+  .feats{list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+  .feats li{font-size:.78rem;font-weight:700;color:var(--ink-2);background:#F7F2E9;border-radius:8px;padding:4px 8px}
+  .buy-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:6px}
+  .price{font-family:var(--display);font-weight:800;font-size:1.55rem;letter-spacing:-.5px;line-height:1}
+  .price small{display:block;font-family:var(--text);font-size:.72rem;font-weight:700;color:var(--green);letter-spacing:0;margin-top:3px}
+  .add{width:48px;height:48px;border-radius:16px;border:0;background:var(--red);color:#fff;font-size:1.5rem;font-weight:800;cursor:pointer;display:grid;place-items:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.14);transition:transform .16s var(--ease-out)}
+  .add:active{transform:scale(.92)}
+  .order{width:100%;margin-top:4px}
+
+  /* Cómo funciona */
+  .how{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow-sm)}
+  .step .n{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.2rem;color:#fff;margin-bottom:10px}
+  .step b{display:block;font-family:var(--display);font-size:1.12rem;line-height:1.15;margin-bottom:4px}
+  .step p{color:var(--ink-2);font-size:.92rem}
+  .faq{display:grid;gap:10px;margin-bottom:40px}
+  details{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:var(--shadow-sm)}
+  summary{cursor:pointer;font-weight:800;list-style:none;display:flex;justify-content:space-between;gap:10px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:var(--display);font-size:1.4rem;line-height:1;transition:transform .25s var(--ease)}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--ink-2);margin-top:8px}
+
+  footer{background:var(--ink);color:#d9d5f0;padding:34px 0 110px;font-size:.9rem}
+  footer .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+  footer b{color:#fff}
+
+  /* Instagram flotante */
+  .wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:8px;background:linear-gradient(45deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4);color:#fff;font-weight:800;border-radius:999px;padding:13px 18px 13px 14px;box-shadow:0 10px 30px -6px rgba(221,42,123,.55);text-decoration:none;transition:transform .16s var(--ease-out)}
+  .ig-grad{background:linear-gradient(45deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4)!important;color:#fff!important}
+  /* Ventana de pedido listo */
+  .done{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:16px;background:rgba(31,26,61,.5)}
+  .done.show{display:grid}
+  .done-card{background:#fff;border-radius:26px;max-width:460px;width:100%;padding:22px;display:grid;gap:12px;box-shadow:0 30px 80px -20px rgba(31,26,61,.45);animation:tin .4s var(--ease) both}
+  .done-card h3{font-family:var(--display);font-size:1.5rem;line-height:1.1}
+  .done-card ol{padding-left:20px;display:grid;gap:4px;font-weight:700;color:var(--ink-2)}
+  .done-card textarea{font-size:13px;height:150px;resize:none}
+  .wa:active{transform:scale(.96)}
+  .wa svg{width:22px;height:22px}
+
+  /* Hoja del pedido: abajo en celular, lateral en computador */
+  .overlay{position:fixed;inset:0;background:rgba(31,26,61,.42);opacity:0;pointer-events:none;transition:opacity .35s var(--ease);z-index:40}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;z-index:50;background:#fff;display:flex;flex-direction:column;transition:transform .5s var(--ease);
+    left:0;right:0;bottom:0;max-height:92dvh;border-radius:26px 26px 0 0;transform:translateY(100%)}
+  .sheet.show{transform:none}
+  .grab{width:44px;height:5px;border-radius:999px;background:#E3DCCF;margin:10px auto 0}
+  @media (min-width:760px){
+    .sheet{left:auto;top:12px;bottom:12px;right:12px;width:430px;max-height:none;border-radius:26px;transform:translateX(calc(100% + 24px))}
+    .grab{display:none}
+  }
+  .sh{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px}
+  .sh h3{font-family:var(--display);font-size:1.45rem;letter-spacing:-.4px}
+  .x{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:1.2rem;display:grid;place-items:center}
+  .sb{padding:4px 20px 16px;overflow-y:auto;display:grid;gap:14px;align-content:start;flex:1}
+  .line{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;background:#FBF7F0;border-radius:16px;padding:10px}
+  .line .th{width:56px;height:56px;border-radius:12px;background:var(--tint,#FFF1D6);display:grid;place-items:center;font-size:1.8rem;overflow:hidden}
+  .line .th img{width:100%;height:100%;object-fit:contain;background:#fff}
+  .line .n{font-weight:800;font-size:.92rem;line-height:1.2}
+  .line .p{color:var(--ink-2);font-size:.85rem;font-weight:700}
+  .qty{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:4px;border:1px solid var(--line)}
+  .qty button{width:28px;height:28px;border-radius:9px;border:0;background:#F4EEE3;font-weight:800;cursor:pointer}
+  .qty b{min-width:14px;text-align:center}
+  .sum{display:flex;justify-content:space-between;align-items:baseline;font-weight:800}
+  .sum .t{font-family:var(--display);font-size:1.7rem;letter-spacing:-.5px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chips span{font-size:.78rem;font-weight:800;background:#EAF8F1;color:#11784A;border-radius:999px;padding:5px 10px}
+  form{display:grid;gap:10px}
+  label{display:grid;gap:5px;font-size:.85rem;font-weight:800}
+  input,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#FBF7F0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;transition:border-color .2s,background-color .2s}
+  input:focus,textarea:focus{outline:none;border-color:var(--blue);background:#fff}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .empty{text-align:center;color:var(--ink-2);padding:26px 0;font-weight:700}
+  .empty .e{font-size:2.6rem;display:block;margin-bottom:6px}
+  .sf{padding:14px 20px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+  .sf .btn{width:100%;background:#25D366;color:#073B1A;font-size:1.05rem;padding:16px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+
+
+  /* Vista rápida */
+  .qv{position:fixed;inset:0;z-index:55;display:grid;place-items:center;padding:16px;pointer-events:none}
+  .qv-card{pointer-events:auto;background:#fff;border-radius:28px;max-width:860px;width:100%;max-height:92dvh;overflow:auto;display:grid;grid-template-columns:1.05fr 1fr;box-shadow:0 30px 80px -20px rgba(31,26,61,.45);opacity:0;transform:translateY(12px) scale(.97);transition:opacity .3s var(--ease),transform .45s var(--ease)}
+  .qv.show .qv-card{opacity:1;transform:none}
+  .qv-ph{background:var(--tint,#FFF1D6);display:grid;place-items:center;min-height:340px;position:relative}
+  .qv-ph img{width:100%;height:100%;object-fit:contain;background:#fff;padding:6%}
+  .qv-ph .emoji{font-size:7rem}
+  .qv-b{padding:26px;display:flex;flex-direction:column;gap:12px}
+  .qv-b h3{font-family:var(--display);font-size:1.8rem;line-height:1.05;letter-spacing:-.5px}
+  .qv-b ul{list-style:none;display:grid;gap:8px}
+  .qv-b li{display:flex;gap:10px;align-items:center;font-weight:700;color:var(--ink-2)}
+  .qv-b li::before{content:"✓";width:24px;height:24px;border-radius:8px;background:#EAF8F1;color:#11784A;display:grid;place-items:center;font-weight:900;flex:none}
+  .qv-b .price{font-size:2.1rem}
+  .qv-card{position:relative}
+  .qv-card .x{position:absolute;top:14px;right:14px;z-index:2}
+  .ph{cursor:zoom-in}
+  @media (max-width:700px){.qv{align-items:end;padding:0}.qv-card{grid-template-columns:1fr;border-radius:26px 26px 0 0;max-height:92dvh}.qv-ph{min-height:280px}}
+
+  /* Toast */
+  .toasts{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:grid;gap:8px;pointer-events:none;width:max-content;max-width:92vw}
+  .toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;font-weight:800;font-size:.9rem;border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);animation:tin .45s var(--ease) both}
+  .toast.out{animation:tout .3s var(--ease) both}
+  @keyframes tin{from{opacity:0;transform:translateY(14px) scale(.96)}}
+  @keyframes tout{to{opacity:0;transform:translateY(8px) scale(.97)}}
+
+  /* Vista privada de rentabilidad (?admin) */
+  .admin{display:none;background:#fff;border:2px solid var(--purple);border-radius:var(--r);padding:18px;margin:26px 0;box-shadow:var(--shadow)}
+  .admin.show{display:block}
+  .admin h3{font-family:var(--display);font-size:1.4rem}
+  .admin .cfg{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+  .admin .cfg label{font-size:.8rem}
+  .admin .cfg input{width:120px;padding:8px 10px}
+  .tbl{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:860px}
+  th,td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  th{font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-2)}
+  .ok{color:#11784A;font-weight:800}.bad{color:#C62828;font-weight:800}.mid{color:#B26A00;font-weight:800}
+
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr}.hero-art{max-width:360px}.how{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.perks{grid-template-columns:1fr}.how{grid-template-columns:1fr}.section-head{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr 1fr;gap:12px}.body{padding:12px}.name{font-size:1.02rem}.price{font-size:1.3rem}.feats li:nth-child(n+3){display:none}.age{top:auto;bottom:10px;right:10px}.ph .soon{display:none}.order{padding:12px 10px;font-size:.92rem}.order .long{display:none}.hero-art{max-width:260px}.tag{font-size:.68rem;padding:4px 8px}.add{width:42px;height:42px}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="ribbon" aria-hidden="true"><div class="track" id="ribbon"></div></div>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="logo" href="#" aria-label="Mundo RC, inicio">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M3 15.5 5 10a2 2 0 0 1 1.9-1.3h10.2A2 2 0 0 1 19 10l2 5.5V18a1 1 0 0 1-1 1h-1.2M3 15.5V18a1 1 0 0 0 1 1h1.2M3 15.5h18M8.8 19h6.4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="19" r="1.8" fill="#FFC531"/><circle cx="17" cy="19" r="1.8" fill="#FFC531"/><path d="M12 8.7V4m0 0-2 1.2M12 4l2 1.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      <span class="logo-word">Mundo<b>RC</b></span>
+    </a>
+    <button class="cart-btn" onclick="openSheet()" aria-label="Ver mi pedido">🛒 Mi pedido <span class="count" id="count">0</span></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow"><i>✓</i> Pagas en efectivo cuando te llega</span>
+        <h1>Juguetes a control remoto que <span class="hl">enamoran</span></h1>
+        <p>Dinosaurios y robots, drones, carros todoterreno y anfibios, aviones y máquinas de construcción. Pídelo por Instagram en un minuto y te llega a la puerta en toda Colombia.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#catalogo">Ver juguetes</a>
+          <a class="btn btn-ghost" data-ig="profile" href="#" target="_blank" rel="noopener">📸 Síguenos en Instagram</a>
+        </div>
+        <div class="perks">
+          <div class="perk"><span class="ic" style="background:#EAF8F1">💵</span>Pago contra entrega</div>
+          <div class="perk"><span class="ic" style="background:#E8F2FF">🚚</span>Envío incluido</div>
+          <div class="perk"><span class="ic" style="background:#FFF1D6">🔋</span>Recargables</div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="blob"></div>
+        <div class="float f1"><img data-hero="0" alt=""></div>
+        <div class="float f2"><img data-hero="1" alt=""></div>
+        <div class="float f3"><img data-hero="2" alt=""></div>
+        <div class="sticker"><div>¡Envío<small>a toda Colombia!</small></div></div>
+      </div>
+    </div>
+    </div>
+    <div class="deadline" id="deadline"><span class="d">🎄</span><span>Para que llegue antes del 24, pide a más tardar el <b id="dl"></b>.</span></div>
+  </section>
+
+  <section class="admin" id="admin" aria-label="Rentabilidad">
+    <h3>Rentabilidad (solo tú ves esto)</h3>
+    <p style="color:var(--ink-2)">Costos tomados de Dropi y Mastershop el 1 de noviembre de 2026. Revisa el stock antes de pautar: cambia todos los días.</p>
+    <div class="cfg">
+      <label>Flete por pedido<input id="cFlete" type="number" value="12000"></label>
+      <label>Comisión Dropi %<input id="cCom" type="number" value="2" step="0.5"></label>
+      <label>% de entrega<input id="cEnt" type="number" value="70"></label>
+      <label>Costo por devolución<input id="cDev" type="number" value="18000"></label>
+      <label>Publicidad por pedido<input id="cCpa" type="number" value="20000"></label>
+    </div>
+    <div class="tbl"><table id="tbl"></table></div>
+  </section>
+
+  <div class="section-head" id="catalogo">
+    <div><h2>Elige tu juguete</h2><p>Precio con envío incluido. Pagas al recibir.</p></div>
+  </div>
+  <nav class="filters" id="filters" aria-label="Categorías"></nav>
+  <section class="grid" id="grid" aria-live="polite"></section>
+
+  <div class="section-head"><div><h2>Así de fácil</h2><p>Sin tarjetas, sin registros.</p></div></div>
+  <section class="how">
+    <div class="step"><span class="n" style="background:var(--red)">1</span><b>Elige</b><p>Toca <strong>Pedir</strong> en el juguete que quieres.</p></div>
+    <div class="step"><span class="n" style="background:var(--blue)">2</span><b>Tus datos</b><p>Nombre, celular y dirección. Toma 30 segundos.</p></div>
+    <div class="step"><span class="n" style="background:var(--green)">3</span><b>Confirmamos</b><p>Te respondemos por Instagram y despachamos.</p></div>
+    <div class="step"><span class="n" style="background:var(--orange)">4</span><b>Pagas al recibir</b><p>En efectivo, cuando lo tienes en tus manos.</p></div>
+  </section>
+
+  <section class="faq">
+    <details><summary>¿Cuánto tarda en llegar?</summary><p>Entre 2 y 5 días hábiles en ciudades principales, y un poco más en municipios. Te enviamos la guía para que sigas tu pedido.</p></details>
+    <details><summary>¿El envío tiene costo?</summary><p>No. El precio que ves ya incluye el envío. Pagas solo eso.</p></details>
+    <details><summary>¿Los drones necesitan registro?</summary><p>La Aerocivil exige registrar los drones de 200 g o más. Antes de despachar te confirmamos el peso del modelo que pediste.</p></details>
+    <details><summary>¿Y si llega con un defecto?</summary><p>Escríbenos por Instagram con un video del problema en los primeros 5 días y te ayudamos con el cambio según la garantía del producto.</p></details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <div><b>Mundo RC</b> · Juguetes a control remoto · Colombia · <a data-ig="profile" href="#" target="_blank" rel="noopener" style="color:#fff"><span data-ig="user">Instagram</span></a></div>
+    <div>Precios en pesos colombianos, envío incluido · © <span id="yr"></span></div>
+  </div>
+</footer>
+
+<a class="wa" data-ig="dm" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por Instagram">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+  <span data-ig="user">Instagram</span>
+</a>
+
+<div class="overlay" id="overlay" onclick="closeSheet();closeQV()"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="grab"></div>
+  <div class="sh"><h3 id="shTitle">Tu pedido</h3><button class="x" onclick="closeSheet()" aria-label="Cerrar">✕</button></div>
+  <div class="sb">
+    <div id="lines"></div>
+    <div class="sum"><span>Total al recibir</span><span class="t" id="total">$0</span></div>
+    <div class="chips"><span>✓ Envío incluido</span><span>✓ Pagas en efectivo</span></div>
+    <form id="form" onsubmit="sendOrder(event)" novalidate>
+      <label>Nombre y apellido<input name="nombre" required autocomplete="name"></label>
+      <label>Celular<input name="cel" required inputmode="tel" autocomplete="tel" placeholder="300 123 4567"></label>
+      <div class="two">
+        <label>Departamento<input name="depto" required></label>
+        <label>Ciudad o municipio<input name="ciudad" required></label>
+      </div>
+      <label>Dirección<input name="dir" required autocomplete="street-address" placeholder="Calle 10 # 20-30, apto 201"></label>
+      <label>Barrio<input name="barrio" required></label>
+      <label>Indicaciones (opcional)<textarea name="notas" rows="2" placeholder="Casa esquinera, portería, horario…"></textarea></label>
+    </form>
+  </div>
+  <div class="sf"><button class="btn ig-grad" type="submit" form="form">Enviar pedido por Instagram</button></div>
+</aside>
+
+<div class="done" id="done" role="dialog" aria-modal="true" aria-labelledby="doneT">
+  <div class="done-card">
+    <h3 id="doneT">¡Tu pedido está listo! 🎉</h3>
+    <ol><li>Ya copiamos tu pedido.</li><li>Toca <b>Abrir Instagram</b>.</li><li>En el chat, mantén presionado y elige <b>Pegar</b>. Envía.</li></ol>
+    <textarea id="doneMsg" readonly></textarea>
+    <button class="btn btn-ghost" onclick="copyOrder()">Copiar de nuevo</button>
+    <a class="btn ig-grad" data-ig="dm" href="#" target="_blank" rel="noopener">Abrir Instagram</a>
+    <button class="btn btn-ghost" onclick="$('#done').classList.remove('show')">Cerrar</button>
+  </div>
+</div>
+<div class="qv" id="qv" role="dialog" aria-modal="true" aria-label="Detalle del producto"><div class="qv-card" id="qvCard"></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — solo cambias esta parte
+   ===================================================================== */
+
+// Tu usuario de Instagram, sin @. Cámbialo aquí y se actualiza en todo el sitio.
+const INSTAGRAM = "betancurtjhon132026";
+
+// Fotos: false = se cargan desde Dropi/Mastershop. true = se cargan desde tu carpeta "fotos/".
+const FOTOS_LOCALES = false;
+
+// Último día para pedir y que llegue antes del 24 (deja "" para ocultar el aviso).
+const FECHA_LIMITE = "18 de diciembre";
+
+/* Productos
+   precio       lo que paga el cliente, envío incluido
+   competencia  precio de referencia en tiendas colombianas (solo para tu vista privada)
+   costo        lo que te cobra el proveedor (solo para tu vista privada)
+   plataforma / proveedor / stock   de dónde sale el producto (solo para tu vista privada)
+   fotos        enlaces de las fotos del proveedor en Dropi o Mastershop: la primera es la principal,
+                la segunda aparece al pasar el mouse. Si está vacío se ve el dibujo.      */
+const PRODUCTOS = [
+  {id:"dron8k", cat:"Drones", emoji:"🛸", tint:"#EFEAFF", tag:"Top regalo", tagColor:"#7B5CFF", edad:"14+", nombre:"Dron M3 Max con cámara 8K", feats:["Cámara 8K", "Video en el celular", "Plegable", "Mantiene altura"], precio:189900, competencia:385000, costo:0, plataforma:"", proveedor:"", stock:1063, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1101716/17243015918K.webp"]},
+  {id:"todovapor", cat:"Carros", emoji:"💨", tint:"#EAF8F1", tag:"Echa vapor", tagColor:"#1F1A3D", edad:"8+", nombre:"Todoterreno 4x4 con vapor y luces", feats:["Echa vapor de verdad", "Luces y efectos", "Tracción 4x4"], precio:219900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:50, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1438655/1730838365IMG-20241025-WA0022.jpg"]},
+  {id:"robotia", cat:"Robots", emoji:"🤖", tint:"#E8F2FF", tag:"Inteligente", tagColor:"#2E8BFF", edad:"6+", nombre:"Robot inteligente con control y sensor", feats:["Se mueve con control", "Sensor y gestos", "Luces y sonidos"], precio:179900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:25, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1553866/1732995853portada%20sin%20marca.jpeg"]},
+  {id:"dino8825", cat:"Dinosaurios", emoji:"🦖", tint:"#EAF8F1", tag:"Más vendido", tagColor:"#22C07A", edad:"4+", nombre:"Dinosaurio a control remoto", feats:["Camina con control", "Ruge y tiene luces", "Recargable"], precio:119900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:66, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/2235866/3319c518-fcd7-4b6c-b071-0c4ca300846c.jpg"]},
+  {id:"anfibio", cat:"Carros", emoji:"🛻", tint:"#E3F4FF", tag:"Tierra y agua", tagColor:"#2E8BFF", edad:"6+", nombre:"Carro anfibio todoterreno", feats:["Anda en agua y tierra", "Gira 360°", "Resiste golpes", "Recargable"], precio:159900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:10, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/233764/1733256418anfibio%201%20verde%20ppal.jpg"]},
+  {id:"excavadora", cat:"Construcción", emoji:"🚜", tint:"#FFF1D6", tag:"Favorito", tagColor:"#FF8A1F", edad:"4+", nombre:"Excavadora a control remoto", feats:["Brazo y pala que se mueven", "Luces y sonido", "Recargable"], precio:159900, competencia:189000, costo:0, plataforma:"", proveedor:"", stock:99, fotos:["https://img.master.la/mastershop/media/images/products/productImage-1731710542007.jpeg"]},
+  {id:"stunt", cat:"Aire", emoji:"✈️", tint:"#EFEAFF", tag:"Acrobático", tagColor:"#FF4B4B", edad:"8+", nombre:"Avión dron acrobático Stunt Fighter", feats:["Hace giros de 360°", "Resiste golpes", "Luces LED"], precio:179900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:15, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/2221421/304436cc-62f7-4748-8a77-c81d5f0943e4.jpeg"]},
+  {id:"acuatico", cat:"Carros", emoji:"🌊", tint:"#E3F4FF", tag:"Anfibio", tagColor:"#2E8BFF", edad:"6+", nombre:"Carro acuático y acrobático", feats:["Anda en agua", "Gira y se voltea", "Recargable"], precio:169900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:148, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1357015/1729177299Dise%C3%B1o%20sin%20t%C3%ADtulo%20-%202024-10-11T085829.642.png"]},
+  {id:"dragonvapor", cat:"Dinosaurios", emoji:"🐉", tint:"#FFE3E3", tag:"Echa vapor", tagColor:"#FF4B4B", edad:"4+", nombre:"Dinosaurio dragón con vapor y luces", feats:["Echa vapor por la boca", "Luces y rugido", "Camina solo"], precio:149900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:100, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/437177/1697064826Habd01f8a15934bf88d7684d670580934E.jpg"]},
+  {id:"todoterreno", cat:"Carros", emoji:"🚙", tint:"#EAF8F1", tag:"", tagColor:"", edad:"8+", nombre:"Carro todoterreno Racing 4x4", feats:["Suspensión todoterreno", "Batería recargable", "2.4 GHz"], precio:139900, competencia:239940, costo:0, plataforma:"", proveedor:"", stock:200, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/2315201/527a4e95-2ea8-4b3c-bf5a-54430ebac8ac.jpeg"]},
+  {id:"remolque", cat:"Carros", emoji:"🚚", tint:"#FFF1D6", tag:"", tagColor:"", edad:"8+", nombre:"Todoterreno con remolque", feats:["Incluye remolque", "Tracción todoterreno", "Recargable"], precio:159900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:100, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/2285849/138603a2-da2a-463a-94d6-27bb5eab994b.png"]},
+  {id:"buggy", cat:"Carros", emoji:"🏁", tint:"#FFE3E3", tag:"", tagColor:"", edad:"8+", nombre:"Buggy todoterreno a control remoto", feats:["Ruedas todoterreno", "Alta velocidad", "Recargable"], precio:149900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:120, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1582339/17339350081.jpg"]},
+  {id:"dronecarro", cat:"Drones", emoji:"🚁", tint:"#EFEAFF", tag:"2 en 1", tagColor:"#7B5CFF", edad:"8+", nombre:"Drone que también es carro", feats:["Vuela y rueda", "Fácil de controlar", "Recargable"], precio:139900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:198, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/2306655/b46f6c52-dd5c-4091-986c-aaf63dc144cc.jpeg"]},
+  {id:"volqueta", cat:"Construcción", emoji:"🚛", tint:"#FFF1D6", tag:"", tagColor:"", edad:"4+", nombre:"Volqueta con tolva que se levanta", feats:["Platón que descarga", "Luces y sonido", "Control fácil"], precio:129900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:199, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/2287515/c0e81b01-248e-49bc-b542-80c17298eb17.png"]},
+  {id:"spino", cat:"Dinosaurios", emoji:"🦕", tint:"#EAF8F1", tag:"", tagColor:"", edad:"4+", nombre:"Robot dinosaurio Spinosaurus", feats:["Camina y se mueve", "Luces y sonidos", "Para coleccionar"], precio:129900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:100, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1400005/17298881685.jpg"]},
+  {id:"dinotransf", cat:"Dinosaurios", emoji:"🦖", tint:"#FFF1D6", tag:"Se transforma", tagColor:"#FF8A1F", edad:"6+", nombre:"Robot dragón dinosaurio transformable", feats:["Dinosaurio que se vuelve robot", "Piezas articuladas", "Regalo sorpresa"], precio:129900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:100, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1102238/17243348411_org_zoom.jpg"]},
+  {id:"carrorobot", cat:"Robots", emoji:"🤖", tint:"#E8F2FF", tag:"", tagColor:"", edad:"6+", nombre:"Carro que se convierte en robot", feats:["Se transforma con un botón", "Luces y sonido", "Control remoto"], precio:139900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:100, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1983253/17621825894.jpg"]},
+  {id:"gesto", cat:"Carros", emoji:"🖐️", tint:"#FFE3E3", tag:"Viral", tagColor:"#FF4B4B", edad:"6+", nombre:"Carro acrobático con sensor de mano", feats:["Se maneja con la mano", "Incluye control", "Gira 360°", "Luces"], precio:149900, competencia:168800, costo:0, plataforma:"", proveedor:"", stock:200, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1568585/a99ee874-ddc2-4342-8aa5-37413480699b.jpeg"]},
+  {id:"derrape", cat:"Carros", emoji:"🚙", tint:"#EAF8F1", tag:"", tagColor:"", edad:"6+", nombre:"Todoterreno con derrape automático", feats:["Derrapa solo", "Luces", "Recargable"], precio:139900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:99, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1995536/1763071572ca4cc7d3-f989-4d9c-916d-5ccada092dda.jpg"]},
+  {id:"avion", cat:"Aire", emoji:"✈️", tint:"#EFEAFF", tag:"", tagColor:"", edad:"8+", nombre:"Avión dron con control y luces", feats:["Fácil de volar", "Resiste golpes", "Luces LED"], precio:119900, competencia:0, costo:0, plataforma:"", proveedor:"", stock:26, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1741939/1743717853Captura%20de%20pantalla%202024-11-21%20182925.jpg"]},
+  {id:"droneHD", cat:"Drones", emoji:"🛸", tint:"#EFEAFF", tag:"2 baterías", tagColor:"#1F1A3D", edad:"12+", nombre:"Dron plegable HD con 2 baterías", feats:["Doble batería", "Video en el celular", "Plegable"], precio:119900, competencia:114900, costo:0, plataforma:"", proveedor:"", stock:97, fotos:["https://img.master.la/mastershop/media/images/products/37dc58f8-f8a8-4d9b-818a-c161dc5abf79.jpeg"]},
+  {id:"heli2", cat:"Aire", emoji:"🚁", tint:"#EAF8F1", tag:"Combo x2", tagColor:"#FF8A1F", edad:"6+", nombre:"Combo 2 helicópteros con sensor de mano", feats:["Vuelan con la mano", "Recargables USB", "Para 2 niños"], precio:99900, competencia:105800, costo:0, plataforma:"", proveedor:"", stock:300, fotos:["https://d39ru7awumhhs2.cloudfront.net/colombia/products/1933799/1758557569WhatsApp%20Image%202025-09-22%20at%2011.00.43%20AM%20(1).jpeg"]},
+];
+
+/* ===================================================================== */
+
+const CAT_STYLE = {
+  "Todos":["⭐","#FFF1D6"], "Carros":["🏎️","#FFE3E3"], "Dinosaurios":["🦖","#EAF8F1"], "Robots":["🤖","#E8F2FF"],
+  "Construcción":["🚜","#FFF1D6"], "Aire":["✈️","#EFEAFF"], "Drones":["🛸","#EFEAFF"]
+};
+const $ = s => document.querySelector(s);
+const foto = (p,i=0) => { const u = p.fotos[i]; if(!u) return ""; if(!FOTOS_LOCALES) return u; const ext = (decodeURIComponent(u).match(/\.(jpe?g|png|webp)$/i)||[".jpg"])[0].toLowerCase(); return `fotos/${p.id}${i?"-"+(i+1):""}${ext}`; };
+const fmt = n => "$" + Math.round(n).toLocaleString("es-CO");
+const byId = id => PRODUCTOS.find(p => p.id === id);
+const cats = ["Todos", ...new Set(PRODUCTOS.map(p => p.cat))];
+let filtro = "Todos";
+let carrito = {};
+
+/* Cinta */
+const msgs = ["💵 Pagas cuando lo recibes","🚚 Envío a toda Colombia","🎄 Regalos de Navidad listos","🔋 Juguetes recargables","📸 Pedidos por Instagram"];
+$("#ribbon").innerHTML = [...msgs,...msgs].map(m=>`<span>${m}</span>`).join("");
+
+/* Filtros */
+function renderFilters(){
+  $("#filters").innerHTML = cats.map(c => {
+    const [ic,bg] = CAT_STYLE[c] || ["•","#eee"];
+    return `<button class="f ${c===filtro?'on':''}" onclick="setFilter('${c}')"><span class="dot" style="background:${bg}">${ic}</span>${c}</button>`;
+  }).join("");
+}
+function setFilter(c){ filtro = c; renderFilters(); renderGrid(); }
+
+/* Productos */
+function media(p){
+  if (!p.fotos.length) return `<span class="emoji">${p.emoji}</span><span class="soon">Foto real próximamente</span>`;
+  const main = `<img src="${foto(p)}" alt="${p.nombre}" loading="lazy" class="loading" referrerpolicy="no-referrer" onload="this.classList.remove('loading')" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'emoji',textContent:'${p.emoji}'}))">`;
+  const alt = p.fotos[1] ? `<img class="alt" src="${foto(p,1)}" alt="" loading="lazy">` : "";
+  return main + alt;
+}
+function renderGrid(){
+  const list = PRODUCTOS.filter(p => filtro==="Todos" || p.cat===filtro);
+  $("#grid").innerHTML = list.map((p,i) => `
+    <article class="card" style="animation-delay:${i*40}ms">
+      <div class="ph" style="--tint:${p.tint}" onclick="openQV('${p.id}')">
+        ${media(p)}
+        ${p.tag ? `<span class="tag" style="background:${p.tagColor}">${p.tag}</span>` : ""}
+        <span class="age">${p.edad} años</span>
+      </div>
+      <div class="body">
+        <div class="name">${p.nombre}</div>
+        <ul class="feats">${p.feats.map(f=>`<li>${f}</li>`).join("")}</ul>
+        <div class="buy-row">
+          <div class="price">${fmt(p.precio)}<small>Envío incluido</small></div>
+          <button class="add" onclick="add('${p.id}')" aria-label="Agregar ${p.nombre} al pedido">+</button>
+        </div>
+        <button class="btn btn-primary order" onclick="buyNow('${p.id}')">Pedir<span class="long"> · pago al recibir</span></button>
+      </div>
+    </article>`).join("");
+}
+
+/* Pedido */
+function add(id){ carrito[id] = (carrito[id]||0) + 1; renderCart(true); toast(`Agregado: ${byId(id).nombre}`); }
+function buyNow(id){ if(!carrito[id]) carrito[id] = 1; renderCart(true); openSheet(); }
+function chg(id,d){ carrito[id] = (carrito[id]||0) + d; if(carrito[id] <= 0) delete carrito[id]; renderCart(true); }
+function cartTotal(){ return Object.keys(carrito).reduce((s,id)=>s+carrito[id]*byId(id).precio,0); }
+function renderCart(pop){
+  const ids = Object.keys(carrito);
+  const c = $("#count"); c.textContent = ids.reduce((s,id)=>s+carrito[id],0);
+  if (pop){ c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop"); }
+  $("#total").textContent = fmt(cartTotal());
+  $("#lines").innerHTML = ids.length ? ids.map(id => {
+    const p = byId(id);
+    return `<div class="line">
+      <div class="th" style="--tint:${p.tint}">${p.fotos[0] ? `<img src="${foto(p)}" alt="" referrerpolicy="no-referrer">` : p.emoji}</div>
+      <div><div class="n">${p.nombre}</div><div class="p">${fmt(p.precio)}</div></div>
+      <div class="qty"><button onclick="chg('${id}',-1)" aria-label="Quitar uno">−</button><b>${carrito[id]}</b><button onclick="chg('${id}',1)" aria-label="Agregar uno">+</button></div>
+    </div>`;
+  }).join("") : `<div class="empty"><span class="e">🧸</span>Tu pedido está vacío.<br>Agrega un juguete para empezar.</div>`;
+}
+function openSheet(){ $("#sheet").classList.add("show"); $("#overlay").classList.add("show"); document.body.style.overflow="hidden"; }
+function closeSheet(){ $("#sheet").classList.remove("show"); $("#overlay").classList.remove("show"); document.body.style.overflow=""; }
+document.addEventListener("keydown", e => { if(e.key==="Escape"){ closeSheet(); closeQV(); } });
+
+function sendOrder(e){
+  e.preventDefault();
+  const ids = Object.keys(carrito);
+  if (!ids.length){ toast("Agrega al menos un juguete 🧸"); return; }
+  const form = e.target;
+  const faltan = [...form.querySelectorAll("[required]")].filter(i => !i.value.trim());
+  if (faltan.length){ faltan[0].focus(); toast("Completa tus datos de envío"); return; }
+  const cel = form.cel.value.replace(/\D/g,"");
+  if (cel.length < 10){ form.cel.focus(); toast("Revisa tu número de celular"); return; }
+  const d = Object.fromEntries(new FormData(form).entries());
+  const lineas = ids.map(id => `• ${carrito[id]} x ${byId(id).nombre} (${fmt(byId(id).precio)})`).join("\n");
+  const msg =
+`¡Hola Mundo RC! Quiero hacer este pedido con PAGO CONTRA ENTREGA:
+
+${lineas}
+
+TOTAL: ${fmt(cartTotal())} (envío incluido)
+
+Nombre: ${d.nombre}
+Celular: ${d.cel}
+Ciudad: ${d.ciudad}, ${d.depto}
+Dirección: ${d.dir}
+Barrio: ${d.barrio}${d.notas ? `\nIndicaciones: ${d.notas}` : ""}`;
+  $("#doneMsg").value = msg;
+  copyOrder();
+  closeSheet();
+  $("#done").classList.add("show");
+}
+async function copyOrder(){
+  const t = $("#doneMsg").value;
+  try { await navigator.clipboard.writeText(t); toast("Pedido copiado"); }
+  catch(e){ const a=$("#doneMsg"); a.focus(); a.select(); try{ document.execCommand("copy"); toast("Pedido copiado"); }catch(_){ toast("Copia el texto del cuadro"); } }
+}
+
+
+/* Vista rápida */
+function openQV(id){
+  const p = byId(id);
+  $("#qvCard").innerHTML = `
+    <div class="qv-ph" style="--tint:${p.tint}">${p.fotos[0] ? `<img src="${foto(p)}" alt="${p.nombre}" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'emoji',textContent:'${p.emoji}'}))">` : `<span class="emoji">${p.emoji}</span>`}
+      <button class="x" onclick="closeQV()" aria-label="Cerrar">✕</button></div>
+    <div class="qv-b">
+      ${p.tag ? `<span class="tag" style="position:static;align-self:flex-start;background:${p.tagColor}">${p.tag}</span>` : ""}
+      <h3>${p.nombre}</h3>
+      <ul>${p.feats.map(f=>`<li>${f}</li>`).join("")}<li>Edad recomendada: ${p.edad} años</li></ul>
+      <div class="price">${fmt(p.precio)}<small>Envío incluido · pagas al recibir</small></div>
+      <button class="btn btn-primary" onclick="closeQV();buyNow('${p.id}')">Pedir · pago al recibir</button>
+      <button class="btn btn-ghost" onclick="add('${p.id}');closeQV()">Agregar y seguir viendo</button>
+    </div>`;
+  $("#qv").classList.add("show"); $("#overlay").classList.add("show"); document.body.style.overflow="hidden";
+}
+function closeQV(){ $("#qv").classList.remove("show"); if(!$("#sheet").classList.contains("show")){ $("#overlay").classList.remove("show"); document.body.style.overflow=""; } }
+
+/* Toast */
+function toast(text){
+  const el = document.createElement("div");
+  el.className = "toast"; el.innerHTML = `<span>✓</span><span>${text}</span>`;
+  $("#toasts").appendChild(el);
+  setTimeout(()=>{ el.classList.add("out"); setTimeout(()=>el.remove(), 300); }, 2200);
+}
+
+/* Vista privada de rentabilidad: abre la página con ?admin al final del enlace */
+function renderAdmin(){
+  const flete = +$("#cFlete").value, com = +$("#cCom").value/100, ent = +$("#cEnt").value/100, dev = +$("#cDev").value, cpa = +$("#cCpa").value;
+  const rows = PRODUCTOS.map(p => {
+    const max = p.precio/2.5;
+    const costo = p.costo;
+    const porEntrega = costo ? p.precio - costo - flete - p.precio*com : null;
+    const porDespacho = costo ? porEntrega*ent - (1-ent)*dev - cpa : null;
+    const veces = costo ? p.precio/costo : null;
+    const cls = v => v==null ? "" : v>=2.5 ? "ok" : v>=2 ? "mid" : "bad";
+    const vsComp = p.competencia ? (p.precio<=p.competencia ? `<span class="ok">${fmt(p.competencia)}</span>` : `<span class="bad">${fmt(p.competencia)}</span>`) : "—";
+    return `<tr><td>${p.nombre}</td><td>${fmt(p.precio)}</td><td>${vsComp}</td><td>${fmt(max)}</td>
+      <td>${costo ? fmt(costo) : '<span class="mid">falta</span>'}<br><small style="color:var(--ink-2)">${p.plataforma||""} · ${p.proveedor||""}</small></td><td class="${cls(veces)}">${veces ? veces.toFixed(2)+"x" : "—"}</td>
+      <td>${porEntrega!=null ? fmt(porEntrega) : "—"}</td><td class="${porDespacho==null?'':porDespacho>0?'ok':'bad'}">${porDespacho!=null ? fmt(porDespacho) : "—"}</td></tr>`;
+  }).join("");
+  $("#tbl").innerHTML = `<tr><th>Producto</th><th>Tu precio</th><th>Competencia</th><th>Costo máx. (2,5x)</th><th>Costo y proveedor</th><th>Veces el costo</th><th>Te queda por entrega</th><th>Utilidad por pedido despachado</th></tr>${rows}`;
+}
+if (new URLSearchParams(location.search).has("admin")){
+  $("#admin").classList.add("show");
+  document.querySelectorAll("#admin input").forEach(i => i.addEventListener("input", renderAdmin));
+  renderAdmin();
+}
+
+/* Detalles */
+const IG_LINKS = { profile:`https://instagram.com/${INSTAGRAM}`, dm:`https://ig.me/m/${INSTAGRAM}` };
+document.querySelectorAll("[data-ig]").forEach(el => { const k = el.dataset.ig; if (k==="user") el.textContent = "@"+INSTAGRAM; else el.href = IG_LINKS[k]; });
+$("#yr").textContent = new Date().getFullYear();
+if (FECHA_LIMITE) $("#dl").textContent = FECHA_LIMITE; else $("#deadline").style.display = "none";
+addEventListener("scroll", () => $("#hdr").classList.toggle("scrolled", scrollY > 8), {passive:true});
+
+const HERO = ["dino8825","dron8k","todovapor"];
+document.querySelectorAll("[data-hero]").forEach(img => { const p = byId(HERO[+img.dataset.hero]); img.referrerPolicy = "no-referrer"; img.src = foto(p); img.onerror = () => { img.replaceWith(document.createTextNode(p.emoji)); }; });
+renderFilters(); renderGrid(); renderCart(false);
+</script>
+</body>
+</html>
